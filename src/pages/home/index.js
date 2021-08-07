@@ -16,6 +16,12 @@ const Home = () => {
       >
         <b>Start Now</b>
       </button>
+      <button
+        className="btn-danger btn-lg mt-3"
+        onClick={() => history.push("/anagram")}
+      >
+        <b>Anagram</b>
+      </button>
     </div>
   );
 };

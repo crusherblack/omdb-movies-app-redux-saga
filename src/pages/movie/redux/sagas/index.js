@@ -51,7 +51,6 @@ function* getLoadMoreMovies(action) {
 }
 
 function* getMovie(action) {
-  console.log("get movie", action);
   try {
     const movie = yield call(getApi, action.payload, "DETAIL");
 

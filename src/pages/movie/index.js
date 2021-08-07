@@ -8,8 +8,11 @@ import {
   clearMovie,
 } from "./redux/actions";
 
-import Card from "pages/movie/component/card";
 import Search from "pages/movie/component/search";
+import List from "pages/movie/component/list";
+import Alert from "pages/movie/component/alert";
+import Error from "pages/movie/component/error";
+import LoadMore from "pages/movie/component/loadmore";
 import Modal from "pages/movie/component/modal";
 import Loading from "components/loading";
 
@@ -46,18 +49,6 @@ const Movie = () => {
     setIsModalVisible(true);
   }, [movie]);
 
-  //handle load more infinity scroll
-  const loadMoreMovies = () => {
-    setPage((prev) => prev + 1);
-
-    dispatch(
-      getLoadMoreMovies({
-        search,
-        page,
-      })
-    );
-  };
-
   //show movie poster modal
   const getMovieById = (id) => {
     dispatch(
@@ -71,6 +62,22 @@ const Movie = () => {
     dispatch(clearMovie());
     setIsModalVisible(false);
   };
+
+  //handle load more infinity scroll
+  const loadMoreMovies = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+    if (page >= 2) {
+      dispatch(
+        getLoadMoreMovies({
+          search,
+          page,
+        })
+      );
+    }
+  }, [page]);
 
   //handle infinity scroll
   window.onscroll = () => {
@@ -88,57 +95,24 @@ const Movie = () => {
   };
 
   return (
-    <div
-      className="bg-dark"
-      style={{
-        minHeight: "100vh",
-      }}
-    >
+    <div className="bg-dark movies-container">
       <div className="container px-5 py-5 ">
         <div className="row gy-5 gx-5">
           <Search />
           {loading && <Loading />}
-          {movies.length > 0 &&
-            movies.map((movie, index) => (
-              <div
-                className="col-sm-3"
-                key={movie.imdbID + movie.Title + index}
-                onClick={() => {
-                  getMovieById(movie.imdbID);
-                }}
-              >
-                <Card movie={movie} />
-              </div>
-            ))}
-          {movies.length === 0 && !loading && (
-            <p className="text-white ">No Movies Available!</p>
-          )}
-          {error && !loading && <p>{error}</p>}
-          {movies.length > 0 && (
-            <button
-              className="btn btn-primary btn-block"
-              onClick={loadMoreMovies}
-              disabled={true}
-            >
-              {loading && (
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-              )}
-              {isLastPage ? "End Of Page" : " Load More"}{" "}
-            </button>
+          <List movies={movies} getMovieById={getMovieById} />
+          <Alert movies={movies} loading={loading} error={error} />
+          <Error error={error} loading={loading} />
+          <LoadMore movies={movies} loading={loading} isLastPage={isLastPage} />
+          {movie && (
+            <Modal
+              isModalVisible={isModalVisible}
+              closeModal={closeModal}
+              movie={movie}
+            />
           )}
         </div>
       </div>
-      {movie && (
-        <Modal
-          isModalVisible={isModalVisible}
-          closeModal={closeModal}
-          movie={movie}
-        />
-      )}
     </div>
   );
 };
