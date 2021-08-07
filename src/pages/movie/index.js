@@ -10,6 +10,7 @@ import {
 } from "./redux/actions";
 
 import Search from "pages/movie/component/search";
+import Search2 from "pages/movie/component/search/search2";
 import List from "pages/movie/component/list";
 import Alert from "pages/movie/component/alert";
 import Error from "pages/movie/component/error";
@@ -103,7 +104,9 @@ const Movie = () => {
     <div className="bg-dark movies-container">
       <div className="container px-5 py-5 ">
         <div className="row gy-5 gx-5">
+          <Search2 searchMovie={searchMovie} />
           <Search search={search} searchMovie={searchMovie} />
+
           {loading && <Loading />}
           <List movies={movies} getMovieById={getMovieById} />
           <Alert movies={movies} loading={loading} error={error} />

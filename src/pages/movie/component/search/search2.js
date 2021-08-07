@@ -1,3 +1,23 @@
+import React, { useState, useEffect } from "react";
+
+import { api, apiKey } from "utils/api";
+
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value]);
+
+  return debouncedValue;
+};
+
 const SuggestionsList = (props) => {
   const {
     suggestions,
@@ -32,46 +52,59 @@ const SuggestionsList = (props) => {
   }
   return <></>;
 };
-const Autocomplete = () => {
-  const [inputValue, setInputValue] = React.useState("");
-  const [filteredSuggestions, setFilteredSuggestions] = React.useState([]);
-  const [selectedSuggestion, setSelectedSuggestion] = React.useState(0);
-  const [displaySuggestions, setDisplaySuggestions] = React.useState(false);
+const Autocomplete = ({ searchMovie }) => {
+  const [inputValue, setInputValue] = useState("");
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [selectedSuggestion, setSelectedSuggestion] = useState(0);
+  const [displaySuggestions, setDisplaySuggestions] = useState(false);
+  const [fetchAgain, setFetchAgain] = useState(false);
 
-  const suggestions = [
-    "Oathbringer",
-    "American Gods",
-    "A Game of Thrones",
-    "Prince of Thorns",
-    "Assassin's Apprentice",
-    "The Hero of Ages",
-    "The Gunslinger",
-  ];
+  const searchValue = useDebounce(inputValue, 500);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api(`?apikey=${apiKey}&s=${inputValue}`);
+        const filteredResponse = response.data.Search.map(
+          (movie) => movie.Title
+        );
+
+        const filteredSuggestions = filteredResponse.filter((suggestion) =>
+          suggestion.toLowerCase().includes(searchValue.toLowerCase())
+        );
+
+        setFilteredSuggestions(filteredSuggestions);
+        setDisplaySuggestions(true);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (!fetchAgain) return;
+
+    getData();
+  }, [searchValue]);
 
   const onChange = (event) => {
     const value = event.target.value;
     setInputValue(value);
-
-    const filteredSuggestions = suggestions.filter((suggestion) =>
-      suggestion.toLowerCase().includes(value.toLowerCase())
-    );
-
-    setFilteredSuggestions(filteredSuggestions);
-    setDisplaySuggestions(true);
+    setFetchAgain(true);
   };
 
   const onSelectSuggestion = (index) => {
     setSelectedSuggestion(index);
     setInputValue(filteredSuggestions[index]);
+    setFetchAgain(false);
     setFilteredSuggestions([]);
     setDisplaySuggestions(false);
+    searchMovie(filteredSuggestions[index]);
   };
 
   return (
-    <>
-      <h1>React Autocomplete</h1>
+    <div class="form-group">
+      <h3 className="text-center text-white">Auto Suggestions (not stable)</h3>
       <input
-        className="user-input"
+        className="search form-control"
         type="text"
         onChange={onChange}
         value={inputValue}
@@ -83,14 +116,7 @@ const Autocomplete = () => {
         displaySuggestions={displaySuggestions}
         suggestions={filteredSuggestions}
       />
-    </>
-  );
-};
-
-function App() {
-  return (
-    <div className="App">
-      <Autocomplete />
     </div>
   );
-}
+};
+export default Autocomplete;

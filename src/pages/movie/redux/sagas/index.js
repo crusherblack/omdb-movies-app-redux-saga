@@ -1,7 +1,7 @@
 import { call, put, takeLatest, takeEvery, delay } from "redux-saga/effects";
 
 import * as type from "../types";
-import { api, apiKey } from "../../../../utils/api";
+import { api, apiKey } from "utils/api";
 
 async function getApi(payload, type) {
   try {
