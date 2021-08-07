@@ -6,6 +6,7 @@ import {
   getLoadMoreMovies,
   getMovie,
   clearMovie,
+  changeSearchValue,
 } from "./redux/actions";
 
 import Search from "pages/movie/component/search";
@@ -58,6 +59,10 @@ const Movie = () => {
     );
   };
 
+  const searchMovie = (value) => {
+    dispatch(changeSearchValue(value));
+  };
+
   const closeModal = () => {
     dispatch(clearMovie());
     setIsModalVisible(false);
@@ -98,7 +103,7 @@ const Movie = () => {
     <div className="bg-dark movies-container">
       <div className="container px-5 py-5 ">
         <div className="row gy-5 gx-5">
-          <Search />
+          <Search search={search} searchMovie={searchMovie} />
           {loading && <Loading />}
           <List movies={movies} getMovieById={getMovieById} />
           <Alert movies={movies} loading={loading} error={error} />
