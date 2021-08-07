@@ -1,6 +1,10 @@
-# Welcome to OMDb Apps!
+# Welcome to OMDb Apps
 
 This is simple movie apps using react, redux and redux-saga middleware
+
+![Home](/screenshot/home.png)
+
+![Movies](/screenshot/movies.png)
 
 How run Localy
 
