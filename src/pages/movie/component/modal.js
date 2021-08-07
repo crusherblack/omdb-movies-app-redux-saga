@@ -35,6 +35,7 @@ const DetailMovieModal = ({ isModalVisible, closeModal, movie }) => {
       show={isModalVisible}
       onHide={closeModal}
       aria-labelledby="example-modal-sizes-title-lg"
+      centered
     >
       <Modal.Body className="bg-dark text-white">
         <div className="row">

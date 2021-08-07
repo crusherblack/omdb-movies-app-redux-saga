@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Card = ({ movie }) => {
   return (
@@ -12,6 +13,10 @@ const Card = ({ movie }) => {
       </div>
     </div>
   );
+};
+
+Card.propTypes = {
+  movie: PropTypes.object.isRequired,
 };
 
 export default Card;

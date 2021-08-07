@@ -1,7 +1,22 @@
-import User from "./pages/home/index";
+import React, { lazy } from "react";
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import Loading from "components/loading";
+const Home = lazy(() => import("pages/home"));
+const Movies = lazy(() => import("pages/movie"));
 
 function App() {
-  return <User />;
+  return (
+    <React.Suspense fallback={<Loading />}>
+      <Router>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/movies" exact component={Movies} />
+        </Switch>
+      </Router>
+    </React.Suspense>
+  );
 }
 
 export default App;

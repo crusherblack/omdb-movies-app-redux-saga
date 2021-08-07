@@ -2,7 +2,7 @@ import React from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { changeSearchValue } from "pages/home/redux/actions/index";
+import { changeSearchValue } from "pages/movie/redux/actions/index";
 
 const Search = () => {
   const dispatch = useDispatch();
