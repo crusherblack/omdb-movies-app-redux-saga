@@ -1,0 +1,33 @@
+.card-image {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
+  width: 100%;
+  object-fit: fill;
+  height: 25rem;
+}
+
+.movie-card {
+  height: 100%;
+  border: none;
+  transition: 0.3s;
+}
+
+.movie-card:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.movie-card-body {
+  padding: 0 !important;
+}
+
+.search,
+.search:active,
+.search:focus {
+  background: #6c757d;
+  color: white;
+  border: 3px solid #0d6efd;
+}
+
+.custom-text-container > p {
+  margin-bottom: 0 !important;
+}
